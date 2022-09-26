@@ -9,7 +9,7 @@ public class Game {
     private final Player player1 = new Player("Player 1");
     private final Player player2 = new Player("Player 2");
 
-    private final BooleanProperty running = new SimpleBooleanProperty();
+    private final BooleanProperty running = new SimpleBooleanProperty(true);
         public BooleanProperty runningProperty() {return running;}
         public boolean isRunning() {return running.get();}
 

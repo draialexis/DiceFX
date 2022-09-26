@@ -129,8 +129,8 @@ public class MainWindow {
                     .bind((p1.nameProperty().concat(" : ").concat(p1.scoreProperty()).concat(" points")));
         labelPlayer2.textProperty()
                     .bind((p2.nameProperty().concat(" : ").concat(p2.scoreProperty()).concat(" points")));
+
         game.runningProperty().addListener((__, ___, ____) -> checkGameOver());
-        // how does this work? DOES this work?
 
         player1Button.setUserData(p1);
         player2Button.setUserData(p2);
