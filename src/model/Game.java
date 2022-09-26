@@ -5,7 +5,8 @@ import javafx.beans.property.SimpleBooleanProperty;
 
 public class Game {
 
-    private       Player winner  = null;
+    private Player winner = null;
+    private Player loser = null;
     private final Player player1 = new Player("Player 1");
     private final Player player2 = new Player("Player 2");
 
@@ -14,6 +15,8 @@ public class Game {
         public boolean isRunning() {return running.get();}
 
     public UnmoddablePlayer getWinner() {return winner;}
+
+    public UnmoddablePlayer getLoser() {return loser;}
 
     public UnmoddablePlayer getPlayer1() {return player1;}
 
@@ -26,9 +29,19 @@ public class Game {
             current.setScore(current.getScore() + current.getDieVal().get());
         }
         else {
-            winner = (player1.getScore() > player2.getScore()) ? player1 : player2;
+            if (player1.getScore() > player2.getScore()) {
+                declare(player1, player2);
+            }
+            else {
+                declare(player2, player1);
+            }
             running.set(false);
         }
+    }
+
+    private void declare(Player newWinner, Player newLoser) {
+        winner = newWinner;
+        loser = newLoser;
     }
 
     public void reinit() {
@@ -37,4 +50,5 @@ public class Game {
         player2.setScore(0);
         running.set(true);
     }
+
 }

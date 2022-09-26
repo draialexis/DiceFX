@@ -2,7 +2,6 @@ package model;
 
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableIntegerArray;
 import javafx.collections.ObservableList;
 
 public abstract class UnmoddablePlayer {
@@ -16,7 +15,7 @@ public abstract class UnmoddablePlayer {
         public int getScore() {return score.get();}
 
     private final ObservableList<FinalScore> scoresObs = FXCollections.observableArrayList();
-    protected ListProperty<FinalScore> scores = new SimpleListProperty<>(scoresObs);
+    private final ListProperty<FinalScore> scores = new SimpleListProperty<>(scoresObs);
         public ListProperty<FinalScore> scoresProperty() {return scores;}
         public ObservableList<FinalScore> getScores() {return scores.get();}
 
@@ -26,5 +25,5 @@ public abstract class UnmoddablePlayer {
 
     public IntegerProperty getDieVal() {return die.valueProperty();}
 
-    public void logScore(boolean winner) {getScores().add(new FinalScore(getScore(), winner));} // auto-unboxing..?
+    public void logScore(boolean winner) {getScores().add(new FinalScore(getScore(), winner));}
 }

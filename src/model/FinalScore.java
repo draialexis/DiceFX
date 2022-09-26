@@ -1,6 +1,9 @@
 package model;
 
-import javafx.beans.property.*;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
 public class FinalScore {
 
@@ -17,8 +20,7 @@ public class FinalScore {
         this.winner.set(winner);
     }
 
+    // make own final score Cell and use property binding instead of toString()?
     @Override
-    public String toString() {
-        return String.format("%d -- %s", getTotal(), isWinner()? "WON" : "LOST");
-    }
+    public String toString() {return String.format("%d -- %s", getTotal(), isWinner() ? "WON" : "LOST");}
 }

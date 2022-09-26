@@ -7,11 +7,7 @@ public class Player extends UnmoddablePlayer {
         throwDie();
     }
 
-    public void setScore(int value) {
-        score.setValue(value);
-    }
+    public void setScore(int value) {score.setValue(value);}
 
-    public void throwDie() {
-        die.computeValue();
-    }
+    public void throwDie() {die.computeValue();}
 }
