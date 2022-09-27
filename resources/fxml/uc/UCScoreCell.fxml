@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<fx:root type="BorderPane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+    <right>
+        <ImageView fx:id="image" fitWidth="40" preserveRatio="true"/>
+    </right>
+    <left>
+        <Label fx:id="label" BorderPane.alignment="CENTER"/>
+    </left>
+</fx:root>

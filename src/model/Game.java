@@ -1,12 +1,12 @@
 package model;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class Game {
 
     private Player winner = null;
-    private Player loser = null;
     private final Player player1 = new Player("Player 1");
     private final Player player2 = new Player("Player 2");
 
@@ -14,9 +14,18 @@ public class Game {
         public BooleanProperty runningProperty() {return running;}
         public boolean isRunning() {return running.get();}
 
-    public UnmoddablePlayer getWinner() {return winner;}
+    private final ObjectProperty<Player> currentPlayer = new SimpleObjectProperty<>();
+        public ObjectProperty<Player> currentPlayerProperty() {return currentPlayer;}
+        public Player getCurrentPlayer() {return currentPlayer.get();}
 
-    public UnmoddablePlayer getLoser() {return loser;}
+    private final ObservableList<Throw> throwiesObs = FXCollections.observableArrayList();
+    private final ListProperty<Throw> throwies = new SimpleListProperty<>(throwiesObs);
+        public ObservableList<Throw> getThrowies() {return throwies.get();}
+        public ListProperty<Throw> throwiesProperty() {return throwies;}
+
+    public Game() {currentPlayer.set(player1);}
+
+    public UnmoddablePlayer getWinner() {return winner;}
 
     public UnmoddablePlayer getPlayer1() {return player1;}
 
@@ -25,23 +34,15 @@ public class Game {
     public void throwDie(UnmoddablePlayer player) {
         Player current = (Player) player;
         current.throwDie();
+        throwiesObs.add(new Throw(current, current.getDieVal().get()));
         if (current.getDieVal().get() != 1) {
+            currentPlayer.set(currentPlayer.get() == player1 ? player2 : player1);
             current.setScore(current.getScore() + current.getDieVal().get());
         }
         else {
-            if (player1.getScore() > player2.getScore()) {
-                declare(player1, player2);
-            }
-            else {
-                declare(player2, player1);
-            }
+            winner = player1.getScore() > player2.getScore() ? player1 : player2;
             running.set(false);
         }
-    }
-
-    private void declare(Player newWinner, Player newLoser) {
-        winner = newWinner;
-        loser = newLoser;
     }
 
     public void reinit() {

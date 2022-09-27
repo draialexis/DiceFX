@@ -1,4 +1,4 @@
-package view;
+package view.uc;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -7,19 +7,21 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import model.FinalScore;
 import model.Game;
 import model.UnmoddablePlayer;
 
 import java.io.IOException;
 
-public class UCDieBorderPane extends BorderPane {
+public class UCDieContainer extends BorderPane {
 
+    @FXML
+    private Button throwBtn;
+    @FXML
+    private Label playerLbl;
     @FXML
     private Circle d1;
     @FXML
@@ -34,60 +36,38 @@ public class UCDieBorderPane extends BorderPane {
     private Circle d6;
     @FXML
     private Circle d7;
-
-    @FXML
-    private Button playerBtn;
-    @FXML
-    private StackPane pane;
     @FXML
     private Rectangle rect;
     @FXML
-    private Label playerLbl;
-    @FXML
-    private ListView<FinalScore> playerLvScores;
+    private StackPane pane;
 
     private final DoubleProperty scaleX = new SimpleDoubleProperty();
     private final DoubleProperty scaleY = new SimpleDoubleProperty();
 
-    private UnmoddablePlayer player;
-    private Game game;
-    private Button otherPlayerBtn = null;
+    private final UnmoddablePlayer player;
+    private final Game game;
+
+    public UCDieContainer(UnmoddablePlayer player, Game game) throws IOException {
+        this.player = player;
+        this.game = game;
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/uc/UCDieContainer.fxml"));
+        loader.setRoot(this);
+        loader.setController(this);
+        loader.load();
+    }
 
     @FXML
     private void clickThrowDie(ActionEvent evt) {
-        game.throwDie((UnmoddablePlayer) ((Button) evt.getSource()).getUserData());
-        playerBtn.setDisable(!playerBtn.isDisable());
-        if (otherPlayerBtn.isDisable()) {
-            otherPlayerBtn.setDisable(false);
-        }
+        game.throwDie(player);
     }
 
-    public void setOtherPlayerButton(Button button) {
-        otherPlayerBtn = button;
-    }
-
-    public void setPlayer(UnmoddablePlayer player) {
-        this.player = player;
-        playerBtn.setUserData(player);
-        // bind the label
+    public void initialize() {
         playerLbl.textProperty()
                  .bind((player.nameProperty().concat(" : ").concat(player.scoreProperty()).concat(" points")));
-        // bind the scoreboard
-        playerLvScores.itemsProperty().bind(player.scoresProperty());
-        computeDiePos();
-        playerLvScores.setFocusTraversable(false);
-    }
-
-    public void setGame(Game game) {
-        this.game = game;
+        placeDie();
         initScaleDie(pane, rect, scaleX, scaleY);
-    }
-
-    public UCDieBorderPane() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/UC/UCDieBorderPane.fxml"));
-        loader.setController(this);
-        loader.setRoot(this);
-        loader.load();
+        throwBtn.disableProperty().bind(game.currentPlayerProperty().isEqualTo(player));
     }
 
     private void initScaleDie(StackPane pane, Rectangle rect, DoubleProperty scaleX, DoubleProperty scaleY) {
@@ -97,20 +77,12 @@ public class UCDieBorderPane extends BorderPane {
         rect.scaleYProperty().bind(scaleY);
     }
 
-    private void computeDiePos() {
-        prepareDie(player, d1, d2, d3, d4, d5, d6, d7);
-        scaleDie(scaleX, scaleY, d1, d2, d3, d4, d5, d6, d7);
+    private void placeDie() {
+        prepareDie();
+        scaleDie(d1, d2, d3, d4, d5, d6, d7);
     }
 
-    private void prepareDie(UnmoddablePlayer player,
-                            Circle d1,
-                            Circle d2,
-                            Circle d3,
-                            Circle d4,
-                            Circle d5,
-                            Circle d6,
-                            Circle d7)
-    {
+    private void prepareDie() {
         d1.visibleProperty()
           .bind(player.getDieVal()
                       .isEqualTo(2)
@@ -119,7 +91,7 @@ public class UCDieBorderPane extends BorderPane {
                                 .or(player.getDieVal()
                                           .isEqualTo(4)
                                           .or(player.getDieVal().isEqualTo(5).or(player.getDieVal().isEqualTo(6))))));
-        d1.visibleProperty()
+        d2.visibleProperty()
           .bind(player.getDieVal()
                       .isEqualTo(4)
                       .or(player.getDieVal().isEqualTo(5).or(player.getDieVal().isEqualTo(6))));
@@ -133,7 +105,7 @@ public class UCDieBorderPane extends BorderPane {
                       .or(player.getDieVal().isEqualTo(3).or(player.getDieVal().isEqualTo(5))));
     }
 
-    private void scaleDie(DoubleProperty scaleX, DoubleProperty scaleY, Circle... circles) {
+    private void scaleDie(Circle... circles) {
         for (Circle circle : circles) {
             circle.scaleXProperty().bind(scaleX);
             circle.scaleYProperty().bind(scaleY);

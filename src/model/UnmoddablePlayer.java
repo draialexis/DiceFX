@@ -1,8 +1,6 @@
 package model;
 
 import javafx.beans.property.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 public abstract class UnmoddablePlayer {
 
@@ -14,16 +12,9 @@ public abstract class UnmoddablePlayer {
         public IntegerProperty scoreProperty() {return score;}
         public int getScore() {return score.get();}
 
-    private final ObservableList<FinalScore> scoresObs = FXCollections.observableArrayList();
-    private final ListProperty<FinalScore> scores = new SimpleListProperty<>(scoresObs);
-        public ListProperty<FinalScore> scoresProperty() {return scores;}
-        public ObservableList<FinalScore> getScores() {return scores.get();}
-
     protected Die die = new Die();
 
     public UnmoddablePlayer(String name) {this.name.set(name);}
 
     public IntegerProperty getDieVal() {return die.valueProperty();}
-
-    public void logScore(boolean winner) {getScores().add(new FinalScore(getScore(), winner));}
 }
