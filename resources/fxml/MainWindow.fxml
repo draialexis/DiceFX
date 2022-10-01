@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.control.ListView?>
 <BorderPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MainWindow">
     <left>
-        <ListView fx:id="throwsLV" prefWidth="150" />
+        <ListView fx:id="throwsLV" prefWidth="150"/>
     </left>
     <center>
-        <SplitPane fx:id="diceContainer" dividerPositions="0.5">
-
-        </SplitPane>
+        <SplitPane fx:id="diceContainer" dividerPositions="0.5"/>
     </center>
 </BorderPane>
